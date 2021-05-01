@@ -2,6 +2,10 @@
 // Created by berkeyvx on 1.05.2021.
 //
 
+#include <exception>
+#include <iostream>
+#include <cstddef>
+
 #ifndef STACK_STACK_H
 #define STACK_STACK_H
 
@@ -50,7 +54,7 @@ Stack<T>::Stack()
 template<typename T>
 Stack<T>::~Stack()
 {
-    delete m_pData;
+    delete[] m_pData;
     m_pData = nullptr; // do i need this?
 }
 
