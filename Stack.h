@@ -11,19 +11,24 @@ class Stack
 public:
     Stack();
     ~Stack();
-    Stack& operator=(const Stack& other );
-    Stack& operator=(Stack&& other) noexcept;
+    Stack& operator=(const Stack& other ); // TODO:: not implemented yet
+    Stack& operator=(Stack&& other) noexcept; // TODO:: not implemented yet
+
     // element access
-    T top() const;
+    const T& top() const;
+    T& top();
 
     // capacity
     T size() const { return m_index + 1; }
     bool empty() const { return m_index == -1; }
 
-    //
-    void push(T value);
-    T pop();
-    void swap(Stack& other) noexcept;
+    // modifiers
+    void push(const T& value);
+    void push(T&& value);
+    void pop();
+    void swap(Stack& other) noexcept; // TODO:: not implemented yet
+
+    // debug :)
     void print();
 
 private:
@@ -51,7 +56,42 @@ Stack<T>::~Stack()
 
 
 template<typename T>
-void Stack<T>::push(T value)
+Stack<T> &Stack<T>::operator=(const Stack &other)
+{
+    if(this == &other)
+        return *this;
+
+    return *this;
+}
+
+
+template<typename T>
+Stack<T> &Stack<T>::operator=(Stack &&other) noexcept
+{
+    return *this;
+}
+
+
+template<typename T>
+const T& Stack<T>::top() const
+{
+    if(m_index == -1)
+        throw std::out_of_range("No data in Stack");
+    return m_pData[m_index];
+}
+
+
+template<typename T>
+T& Stack<T>::top()
+{
+    if(m_index == -1)
+        throw std::out_of_range("No data in Stack");
+    return m_pData[m_index];
+}
+
+
+template<typename T>
+void Stack<T>::push(const T& value)
 {
     if(m_index == m_size - 1)
         this->expand();
@@ -60,7 +100,16 @@ void Stack<T>::push(T value)
 
 
 template<typename T>
-T Stack<T>::pop()
+void Stack<T>::push(T &&value)
+{
+    if(m_index == m_size - 1)
+        this->expand();
+    m_pData[++m_index] = std::move(value);
+}
+
+
+template<typename T>
+void Stack<T>::pop()
 {
     if(m_size > 4 && m_index < m_size/4)
         shrink();
@@ -69,16 +118,15 @@ T Stack<T>::pop()
     {
         throw std::out_of_range("No data in Stack");
     }
-    return m_pData[m_index--];
+
+    m_pData[m_index--];
 }
 
 
 template<typename T>
-T Stack<T>::top() const
+void Stack<T>::swap(Stack &other) noexcept
 {
-    if(m_index == -1)
-        throw std::out_of_range("No data in Stack");
-    return m_pData[m_index];
+
 }
 
 
@@ -111,29 +159,6 @@ void Stack<T>::shrink()
     m_pData = pTempData;
 }
 
-
-template<typename T>
-void Stack<T>::swap(Stack &other) noexcept
-{
-
-}
-
-
-template<typename T>
-Stack<T> &Stack<T>::operator=(const Stack &other)
-{
-    if(this == &other)
-        return *this;
-
-    return *this;
-}
-
-
-template<typename T>
-Stack<T> &Stack<T>::operator=(Stack &&other) noexcept
-{
-    return *this;
-}
 
 
 
