@@ -25,10 +25,9 @@ public:
     // capacity
     T size() const { return m_index + 1; }
     bool empty() const { return m_index == -1; }
-
-    // modifiers
-    void push(const T& value);
-    void push(T&& value);
+    
+    template <typename U>
+    void push(U&& value);
     void pop();
     void swap(Stack& other) noexcept; // TODO:: not implemented yet
 
@@ -94,21 +93,15 @@ T& Stack<T>::top()
 }
 
 
-template<typename T>
-void Stack<T>::push(const T& value)
-{
-    if(m_index == m_size - 1)
-        this->expand();
-    m_pData[++m_index] = value;
-}
 
 
 template<typename T>
-void Stack<T>::push(T &&value)
+template<typename U>
+void Stack<T>::push(U &&value)
 {
     if(m_index == m_size - 1)
         this->expand();
-    m_pData[++m_index] = std::move(value);
+    m_pData[++m_index] = std::forward<U>(value);
 }
 
 
